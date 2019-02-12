@@ -11,7 +11,7 @@ class DragTreeNode extends Component {
         this.toggleChild = this.toggleChild.bind(this);
         this.onDrag = this.onDrag.bind(this);
         this.onDrop = this.onDrop.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.insertNode = this.insertNode.bind(this);
 
         this.onDragEnter = this.onDragEnter.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
@@ -30,7 +30,7 @@ class DragTreeNode extends Component {
         this.props.onDragFunc(this.props.node);
     }
 
-    onChange(e) {
+    insertNode(e) {
         e.preventDefault();
         this.props.onChange(this.props.node);
     }
@@ -65,7 +65,7 @@ class DragTreeNode extends Component {
                     onDragEnter={this.onDragEnter}
                     onDragOver={this.onDragOver}
                     onDragLeave={this.onDragLeave}
-                    onDrop={this.onChange}>💫</span>
+                    onDrop={this.insertNode}>💫</span>
                 {node.name}
                 <span role="img" aria-label="公事包"
                     onDragEnter={this.onDragEnter}
