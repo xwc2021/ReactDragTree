@@ -3,12 +3,17 @@ import DrageTreeNode from './DragTreeNode';
 
 class DragTreeNodeFolder extends Component {
     render() {
-        let { node, onDragFunc, onDropFunc, onChange } = this.props;
+        let { node, onDrag, onDragEnterFolder, onDragEnterSwap } = this.props;
 
         if (node.childs == null)
             return null;
 
-        let content = node.childs.map(ele => <DrageTreeNode key={ele.id} node={ele} onDragFunc={onDragFunc} onDropFunc={onDropFunc} onChange={onChange} />);
+        let content = node.childs.map(ele =>
+            <DrageTreeNode key={ele.id} node={ele}
+                onDrag={onDrag}
+                onDragEnterFolder={onDragEnterFolder}
+                onDragEnterSwap={onDragEnterSwap} />
+        );
         return (
             <div>
                 {content}

@@ -14,9 +14,9 @@ class DragTreeNodeRoot extends Component {
 
         this.nowDragNode = null;
         this.onDrag = this.onDrag.bind(this);
-        this.onDrop = this.onDrop.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.refresh = this.refresh.bind(this);
+        this.onDragEnterFolder = this.onDragEnterFolder.bind(this);
+        this.onDragEnterSwap = this.onDragEnterSwap.bind(this);
+        this.onDragEnd = this.onDragEnd.bind(this);
     }
 
     buildRelation(node) {
@@ -35,7 +35,22 @@ class DragTreeNodeRoot extends Component {
         DragTreeNodeRoot.nowDragTree = this;
     }
 
-    isdropToSelfBranch(dragNode, dropNode) {
+    onDragEnterFolder(targetNode) {
+        this.apendTo(targetNode);
+    }
+
+    onDragEnterSwap(targetNode) {
+        this.onChange(targetNode);
+    }
+
+    onDragEnd() {
+        //清除
+        console.log("clear");
+        // DragTreeNodeRoot.nowDragNode = null;
+        // DragTreeNodeRoot.nowDragTree = null;
+    }
+
+    isApendToSelfBranch(dragNode, dropNode) {
         let node = dropNode;
         while (node != null) {
             if (dragNode === node)
@@ -52,19 +67,20 @@ class DragTreeNodeRoot extends Component {
         this.setState({ rootNode: newRoot });
     }
 
-    onDrop(dropNode) {
+    //加
+    apendTo(targetNode) {
         if (DragTreeNodeRoot.nowDragNode == null) {
-            alert("nowDragNode is null");
+            console.log("nowDragNode is null");
             return;
         }
 
         if (DragTreeNodeRoot.nowDragNode.parent == null) {
-            alert("can not drag root");
+            console.log("can not drag root");
             return;
         }
 
-        if (this.isdropToSelfBranch(DragTreeNodeRoot.nowDragNode, dropNode)) {
-            alert("dropToSelfBranch");
+        if (this.isApendToSelfBranch(DragTreeNodeRoot.nowDragNode, targetNode)) {
+            console.log("Apend To SelfBranch");
             return;
         }
 
@@ -74,24 +90,25 @@ class DragTreeNodeRoot extends Component {
         preParent.childs.splice(removeIndex, 1);
 
         //重新建立dragNode的關系
-        if (dropNode.childs == null)
-            dropNode.childs = [];
+        if (targetNode.childs == null)
+            targetNode.childs = [];
 
-        dropNode.childs.push(DragTreeNodeRoot.nowDragNode);
-        DragTreeNodeRoot.nowDragNode.parent = dropNode;
+        targetNode.childs.push(DragTreeNodeRoot.nowDragNode);
+        DragTreeNodeRoot.nowDragNode.parent = targetNode;
 
         //更新
         this.refresh();
         DragTreeNodeRoot.nowDragTree.refresh();
-
-        //清除
-        DragTreeNodeRoot.nowDragNode = null;
-        DragTreeNodeRoot.nowDragTree = null;
     }
 
     onChange(dropNode) {
         if (dropNode.parent !== DragTreeNodeRoot.nowDragNode.parent) {
-            alert("parent is not the same");
+            console.log("parent is not the same");
+            return;
+        }
+
+        if (dropNode === DragTreeNodeRoot.nowDragNode) {
+            console.log("do nothing");
             return;
         }
 
@@ -106,16 +123,17 @@ class DragTreeNodeRoot extends Component {
 
         //更新
         this.refresh();
-
-        //清除
-        DragTreeNodeRoot.nowDragNode = null;
-        DragTreeNodeRoot.nowDragTree = null;
+        console.log("do insert");
     }
 
     render() {
         let node = this.props.node;
         return (
-            <DragTreeNode key={node.id} node={node} onDragFunc={this.onDrag} onDropFunc={this.onDrop} onChange={this.onChange} />
+            <DragTreeNode key={node.id} node={node}
+                onDrag={this.onDrag}
+                onDragEnd={this.onDragEnd}
+                onDragEnterFolder={this.onDragEnterFolder}
+                onDragEnterSwap={this.onDragEnterSwap} />
         );
     }
 }

@@ -10,12 +10,10 @@ class DragTreeNode extends Component {
 
         this.toggleChild = this.toggleChild.bind(this);
         this.onDrag = this.onDrag.bind(this);
-        this.onDrop = this.onDrop.bind(this);
-        this.insertNode = this.insertNode.bind(this);
 
-        this.onDragEnter = this.onDragEnter.bind(this);
+        this.onDragEnterFolder = this.onDragEnterFolder.bind(this);
+        this.onDragEnterSwap = this.onDragEnterSwap.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
-        this.onDragLeave = this.onDragLeave.bind(this);
     }
 
     toggleChild() {
@@ -26,52 +24,43 @@ class DragTreeNode extends Component {
 
     onDrag(e) {
         e.preventDefault();
-        // console.log("Drag" + this.props.node.name);
-        this.props.onDragFunc(this.props.node);
+        console.log("Drag" + this.props.node.name);
+        this.props.onDrag(this.props.node);
     }
 
-    insertNode(e) {
+    onDragEnterFolder(e) {
+        console.log("Folder");
         e.preventDefault();
-        this.props.onChange(this.props.node);
+        this.props.onDragEnterFolder(this.props.node);
     }
 
-    onDrop(e) {
+    onDragEnterSwap(e) {
+        console.log("Swap");
         e.preventDefault();
-        this.props.onDropFunc(this.props.node);
-    }
-
-    onDragEnter(e) {
-        e.preventDefault();
+        this.props.onDragEnterSwap(this.props.node);
     }
 
     onDragOver(e) {
         e.preventDefault();
     }
 
-    onDragLeave(e) {
-        e.preventDefault();
-    }
-
     render() {
-        let { node, onDragFunc, onDropFunc, onChange } = this.props;
-        let content = <DragTreeNodeFolder onDragFunc={onDragFunc} onDropFunc={onDropFunc} onChange={onChange} node={node} />;
+        let { node, onDrag, onDragEnterFolder, onDragEnterSwap } = this.props;
+        let content = <DragTreeNodeFolder node={node} onDrag={onDrag} onDragEnterFolder={onDragEnterFolder} onDragEnterSwap={onDragEnterSwap} />;
         let hasChild = node.childs != null && node.childs.length > 0;
         let showChild = this.state.showChild;
         let toggleHtml = <span className="Toggle" onClick={this.toggleChild}>{showChild ? "-" : "+"}</span>;
         return (
             <div className="Node">
-                <span className="Drag" role="img" aria-label="pizza" draggable onDrag={this.onDrag}>🍕</span>
+                <span className="Drag" role="img" aria-label="pizza" draggable
+                    onDrag={this.onDrag}>🍕</span>
                 <span role="img" aria-label="交換"
-                    onDragEnter={this.onDragEnter}
-                    onDragOver={this.onDragOver}
-                    onDragLeave={this.onDragLeave}
-                    onDrop={this.insertNode}>💫</span>
+                    onDragEnter={this.onDragEnterSwap}
+                    onDragOver={this.onDragOver}>💫</span>
                 {node.name}
                 <span role="img" aria-label="公事包"
-                    onDragEnter={this.onDragEnter}
-                    onDragOver={this.onDragOver}
-                    onDragLeave={this.onDragLeave}
-                    onDrop={this.onDrop}>💼</span>
+                    onDragEnter={this.onDragEnterFolder}
+                    onDragOver={this.onDragOver}>💼</span>
 
                 {hasChild ? toggleHtml : null}
                 {showChild ? content : null}
