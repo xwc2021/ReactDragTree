@@ -145,6 +145,5 @@ class DragTreeNodeRoot extends Component {
 
 DragTreeNodeRoot.nowDragNode = null;
 DragTreeNodeRoot.nowDragTree = null;
-DragTreeNodeRoot.id = 1;
 
 export default DragTreeNodeRoot;
