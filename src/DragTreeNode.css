@@ -1,0 +1,9 @@
+.Node {
+    text-align: left;
+    position: relative;
+    left:20px;
+}
+
+.Toggle {
+    cursor: pointer;
+}
