@@ -112,14 +112,16 @@ class DragTreeNodeRoot extends Component {
             return;
         }
 
-        //先移除
         let L = dropNode.parent.childs;
-        let removeIndex = L.indexOf(DragTreeNodeRoot.nowDragNode);
-        L.splice(removeIndex, 1);
+        let dragIndex = L.indexOf(DragTreeNodeRoot.nowDragNode);
+        let targetIndex = L.indexOf(dropNode);
+
+        //先移除
+        L.splice(dragIndex, 1);
 
         //再插入
-        let insertIndex = L.indexOf(dropNode);
-        L.splice(insertIndex, 0, DragTreeNodeRoot.nowDragNode);
+        //不管是由下往上，或是由上往下drag,都可以swap
+        L.splice(targetIndex, 0, DragTreeNodeRoot.nowDragNode);
 
         //更新
         this.refresh();
