@@ -40,7 +40,7 @@ class DragTreeNodeRoot extends Component {
     }
 
     onDragEnterSwap(targetNode) {
-        this.onChange(targetNode);
+        this.onSwap(targetNode);
     }
 
     onDragEnd() {
@@ -67,7 +67,7 @@ class DragTreeNodeRoot extends Component {
         this.setState({ rootNode: newRoot });
     }
 
-    //加
+    //加入到targetNode底下
     apendTo(targetNode) {
         if (DragTreeNodeRoot.nowDragNode == null) {
             console.log("nowDragNode is null");
@@ -93,7 +93,7 @@ class DragTreeNodeRoot extends Component {
         if (targetNode.childs == null)
             targetNode.childs = [];
 
-        targetNode.childs.push(DragTreeNodeRoot.nowDragNode);
+        targetNode.childs.unshift(DragTreeNodeRoot.nowDragNode);// insert at head
         DragTreeNodeRoot.nowDragNode.parent = targetNode;
 
         //更新
@@ -101,7 +101,7 @@ class DragTreeNodeRoot extends Component {
         DragTreeNodeRoot.nowDragTree.refresh();
     }
 
-    onChange(dropNode) {
+    onSwap(dropNode) {
         if (dropNode.parent !== DragTreeNodeRoot.nowDragNode.parent) {
             console.log("parent is not the same");
             return;
