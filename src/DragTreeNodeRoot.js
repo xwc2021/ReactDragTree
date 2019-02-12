@@ -98,7 +98,10 @@ class DragTreeNodeRoot extends Component {
 
         //更新
         this.refresh();
-        DragTreeNodeRoot.nowDragTree.refresh();
+        if (this !== DragTreeNodeRoot.nowDragTree) // 跨root的情況才refresh
+            DragTreeNodeRoot.nowDragTree.refresh();
+
+        console.log("do appendTo");
     }
 
     onSwap(dropNode) {
@@ -125,7 +128,7 @@ class DragTreeNodeRoot extends Component {
 
         //更新
         this.refresh();
-        console.log("do insert");
+        console.log("do swap");
     }
 
     render() {
