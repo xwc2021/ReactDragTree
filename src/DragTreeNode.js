@@ -30,7 +30,6 @@ class DragTreeNode extends Component {
     }
 
     onDrop(e) {
-        e.preventDefault();
         this.props.onDropFunc(this.props.node);
     }
 

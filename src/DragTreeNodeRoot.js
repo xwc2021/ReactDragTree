@@ -57,6 +57,11 @@ class DragTreeNodeRoot extends Component {
             return;
         }
 
+        if (DragTreeNodeRoot.nowDragNode.parent == null) {
+            alert("can not drag root");
+            return;
+        }
+
         if (this.isdropToSelfBranch(DragTreeNodeRoot.nowDragNode, dropNode)) {
             alert("dropToSelfBranch");
             return;
