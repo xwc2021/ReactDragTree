@@ -4,6 +4,10 @@
     left:20px;
 }
 
+.Drag{
+    cursor: pointer;
+}
+
 .Toggle {
     cursor: pointer;
 }

@@ -10,11 +10,12 @@ class DragTreeNodeRoot extends Component {
 
         //建立parent關系
         this.buildRelation(root);
-        console.log(root);
+        // console.log(root);
 
         this.nowDragNode = null;
         this.onDrag = this.onDrag.bind(this);
         this.onDrop = this.onDrop.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.refresh = this.refresh.bind(this);
     }
 
@@ -37,7 +38,7 @@ class DragTreeNodeRoot extends Component {
     isdropToSelfBranch(dragNode, dropNode) {
         let node = dropNode;
         while (node != null) {
-            if (dragNode == node)
+            if (dragNode === node)
                 return true;
 
             node = node.parent;
@@ -79,8 +80,29 @@ class DragTreeNodeRoot extends Component {
         dropNode.childs.push(DragTreeNodeRoot.nowDragNode);
         DragTreeNodeRoot.nowDragNode.parent = dropNode;
 
+        //更新
         this.refresh();
         DragTreeNodeRoot.nowDragTree.refresh();
+
+        //清除
+        DragTreeNodeRoot.nowDragNode = null;
+        DragTreeNodeRoot.nowDragTree = null;
+    }
+
+    onChange(dropNode) {
+        if (dropNode.parent !== DragTreeNodeRoot.nowDragNode.parent) {
+            alert("parent is not the same");
+            return;
+        }
+
+        //交換
+        let L = dropNode.parent.childs;
+        let j = L.indexOf(dropNode);
+        let k = L.indexOf(DragTreeNodeRoot.nowDragNode);
+        [L[j], L[k]] = [L[k], L[j]];
+
+        //更新
+        this.refresh();
 
         //清除
         DragTreeNodeRoot.nowDragNode = null;
@@ -90,7 +112,7 @@ class DragTreeNodeRoot extends Component {
     render() {
         let node = this.props.node;
         return (
-            <DragTreeNode key={node.id} node={node} onDragFunc={this.onDrag} onDropFunc={this.onDrop} />
+            <DragTreeNode key={node.id} node={node} onDragFunc={this.onDrag} onDropFunc={this.onDrop} onChange={this.onChange} />
         );
     }
 }
